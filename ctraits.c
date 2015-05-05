@@ -1,18 +1,36 @@
-#include "add.h"
-#include "mat.h"
-#include "mul.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "cat.h"
+#include "num.h"
+
+static int compar(const void *a, const void *b)
+{
+	const struct cat *c = *(struct cat **)a;
+	return c->ord.impl->cmp(&c->ord, &(*(struct cat **)b)->ord);
+}
 
 int main()
 {
-	struct mat *m1 = mkmat(1, 2, 3, 4, 5, 6, 7, 8, 9);
-	pmat(m1);
-	mul_div(&m1->mul, 2);
-	pmat(m1);
-	struct mat *m2 = mkmat(9, 8, 7, 6, 5, 4, 3, 2, 1);
-	pmat(m2);
-	add_sub(&m1->add, &m2->add);
-	pmat(m1);
-	rmmat(m1);
-	rmmat(m2);
+	struct cat *cats[] = {
+		cat_new("Tom", 5),
+		cat_new("Pookie", 3),
+		cat_new("Jack Bauer", 36),
+		cat_new("Fluffy", 14),
+	};
+	puts("==== before ====");
+	for (size_t i = 0; i < sizeof cats / sizeof *cats; ++i) {
+		struct num *n = num_new(i);
+		fmt_print("[{}] {}\n", &n->fmt, &cats[i]->fmt);
+		num_free(n);
+	}
+	qsort(cats, sizeof cats / sizeof *cats, sizeof *cats, compar);
+	puts("==== after  ====");
+	for (size_t i = 0; i < sizeof cats / sizeof *cats; ++i) {
+		struct num *n = num_new(i);
+		fmt_print("[{}] {}\n", &n->fmt, &cats[i]->fmt);
+		num_free(n);
+		cat_free(cats[i]);
+	}
 	return 0;
 }
