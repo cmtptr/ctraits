@@ -28,14 +28,14 @@ static int num_fmt(const struct fmt *f, char *buf, size_t len)
 
 struct num *num_new(int value)
 {
-	static const struct eq_impl ceq = {
+	static const struct eq_impl numeq = {
 		EQ_IMPL_DEFAULTS,
 	};
-	static const struct ord_impl cord = {
+	static const struct ord_impl numord = {
 		ORD_IMPL_DEFAULTS,
 		.cmp = num_cmp,
 	};
-	static const struct fmt_impl cfmt = {
+	static const struct fmt_impl numfmt = {
 		FMT_IMPL_DEFAULTS,
 		.fmt = num_fmt,
 	};
@@ -45,12 +45,12 @@ struct num *num_new(int value)
 		.num = {
 			.ord = {
 				.eq = {
-					.impl = &ceq,
+					.impl = &numeq,
 				},
-				.impl = &cord,
+				.impl = &numord,
 			},
 			.fmt = {
-				.impl = &cfmt,
+				.impl = &numfmt,
 			},
 		},
 	};

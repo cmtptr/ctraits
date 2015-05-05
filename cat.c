@@ -31,14 +31,14 @@ static int cat_fmt(const struct fmt *f, char *buf, size_t len)
 
 struct cat *cat_new(const char *name, unsigned int age)
 {
-	static const struct eq_impl ceq = {
+	static const struct eq_impl cateq = {
 		EQ_IMPL_DEFAULTS,
 	};
-	static const struct ord_impl cord = {
+	static const struct ord_impl catord = {
 		ORD_IMPL_DEFAULTS,
 		.cmp = cat_cmp,
 	};
-	static const struct fmt_impl cfmt = {
+	static const struct fmt_impl catfmt = {
 		FMT_IMPL_DEFAULTS,
 		.fmt = cat_fmt,
 	};
@@ -49,12 +49,12 @@ struct cat *cat_new(const char *name, unsigned int age)
 		.cat = {
 			.ord = {
 				.eq = {
-					.impl = &ceq,
+					.impl = &cateq,
 				},
-				.impl = &cord,
+				.impl = &catord,
 			},
 			.fmt = {
-				.impl = &cfmt,
+				.impl = &catfmt,
 			},
 		},
 	};
