@@ -32,14 +32,14 @@ static int num_fmt(const struct fmt *f, char *buf, size_t len)
 
 struct num *num_new(int value)
 {
-	static const struct eq_impl numeq = {
+	static const struct eq_impl eq_impl = {
 		EQ_IMPL_DEFAULTS,
 	};
-	static const struct ord_impl numord = {
+	static const struct ord_impl ord_impl = {
 		ORD_IMPL_DEFAULTS,
 		._cmp = num_cmp,
 	};
-	static const struct fmt_impl numfmt = {
+	static const struct fmt_impl fmt_impl = {
 		FMT_IMPL_DEFAULTS,
 		._fmt = num_fmt,
 	};
@@ -47,9 +47,9 @@ struct num *num_new(int value)
 	*p = (struct priv){
 		.value = value,
 		.num = {
-			.eq = {.impl = &numeq},
-			.ord = {.impl = &numord},
-			.fmt = {.impl = &numfmt},
+			.eq = {.impl = &eq_impl},
+			.ord = {.impl = &ord_impl},
+			.fmt = {.impl = &fmt_impl},
 		},
 	};
 	return &p->num;
