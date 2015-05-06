@@ -6,8 +6,7 @@
 
 static int compar(const void *a, const void *b)
 {
-	const struct cat *c = *(struct cat **)a;
-	return c->ord.impl->cmp(&c->ord, &(*(struct cat **)b)->ord);
+	return cmp(*(struct cat **)a, *(struct cat **)b);
 }
 
 int main()

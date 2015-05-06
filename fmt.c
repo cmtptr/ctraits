@@ -5,7 +5,7 @@
 
 #include "fmt.h"
 
-int fmt(const struct fmt *f, char *dest, size_t len)
+int fmt_fmt(const struct fmt *f, char *dest, size_t len)
 {
 	return snprintf(dest, len, "%p", (void *)f);
 }
@@ -23,7 +23,7 @@ int fmt_print(const char *fmt, ...)
 		fmt = str + 2;
 		ptr += l, len -= l;
 		const struct fmt *f = va_arg(ap, struct fmt *);
-		l = f->impl->fmt(f, ptr, len);
+		l = f->impl->_fmt(f, ptr, len);
 		ptr += l, len -= l;
 	}
 	len = strncpy(ptr, fmt, len) - buf;

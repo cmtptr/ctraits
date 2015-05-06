@@ -6,12 +6,24 @@ struct eq {
 };
 
 struct eq_impl {
-	int (*eq)(const struct eq *, const struct eq *);
-	int (*neq)(const struct eq *, const struct eq *);
+	int (*_eq)(const struct eq *, const struct eq *);
+	int (*_neq)(const struct eq *, const struct eq *);
 };
 
-int eq(const struct eq *, const struct eq *);
-int neq(const struct eq *, const struct eq *);
-#define EQ_IMPL_DEFAULTS .eq = eq, .neq = neq
+static inline int eq(const struct eq *a, const struct eq *b)
+{
+	return a->impl->_eq(a, b);
+}
+#define eq(a, b) eq(&(a)->eq, &(b)->eq)
+
+static inline int neq(const struct eq *a, const struct eq *b)
+{
+	return a->impl->_neq(a, b);
+}
+#define neq(a, b) neq(&(a)->eq, &(b)->eq)
+
+int eq_eq(const struct eq *, const struct eq *);
+int eq_neq(const struct eq *, const struct eq *);
+#define EQ_IMPL_DEFAULTS ._eq = eq_eq, ._neq = eq_neq
 
 #endif

@@ -8,11 +8,11 @@ struct fmt {
 };
 
 struct fmt_impl {
-	int (*fmt)(const struct fmt *, char *, size_t);
+	int (*_fmt)(const struct fmt *, char *, size_t);
 };
 
-int fmt(const struct fmt *, char *, size_t);
-#define FMT_IMPL_DEFAULTS .fmt = fmt
+int fmt_fmt(const struct fmt *, char *, size_t);
+#define FMT_IMPL_DEFAULTS ._fmt = fmt_fmt
 
 int fmt_print(const char *, ...);
 

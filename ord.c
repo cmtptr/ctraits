@@ -1,38 +1,49 @@
+#include <assert.h>
+
+#include "eq.h"
 #include "ord.h"
 
-int cmp(const struct ord *a, const struct ord *b)
+int ord_cmp(const struct eq *ea, const struct ord *oa, const struct eq *eb,
+		const struct ord *ob)
 {
-	if (a->eq.impl->eq(&a->eq, &b->eq))
+	assert(oa->impl == ob->impl);
+	if (ea->impl->_eq(ea, eb))
 		return 0;
-	return a < b ? -1 : 1;
+	return oa < ob ? -1 : 1;
 }
 
-int lt(const struct ord *a, const struct ord *b)
+int ord_lt(const struct eq *ea, const struct ord *oa, const struct eq *eb,
+		const struct ord *ob)
 {
-	return a->impl->cmp(a, b) < 0;
+	return oa->impl->_cmp(ea, oa, eb, ob) < 0;
 }
 
-int le(const struct ord *a, const struct ord *b)
+int ord_le(const struct eq *ea, const struct ord *oa, const struct eq *eb,
+		const struct ord *ob)
 {
-	return a->impl->cmp(a, b) <= 0;
+	return oa->impl->_cmp(ea, oa, eb, ob) <= 0;
 }
 
-int gt(const struct ord *a, const struct ord *b)
+int ord_gt(const struct eq *ea, const struct ord *oa, const struct eq *eb,
+		const struct ord *ob)
 {
-	return a->impl->cmp(a, b) > 0;
+	return oa->impl->_cmp(ea, oa, eb, ob) > 0;
 }
 
-int ge(const struct ord *a, const struct ord *b)
+int ord_ge(const struct eq *ea, const struct ord *oa, const struct eq *eb,
+		const struct ord *ob)
 {
-	return a->impl->cmp(a, b) >= 0;
+	return oa->impl->_cmp(ea, oa, eb, ob) >= 0;
 }
 
-struct ord *max(const struct ord *a, const struct ord *b)
+struct ord *ord_max(const struct eq *ea, const struct ord *oa,
+		const struct eq *eb, const struct ord *ob)
 {
-	return (struct ord *)(a->impl->ge(a, b) ? a : b);
+	return (struct ord *)(oa->impl->_ge(ea, oa, eb, ob) ? oa : ob);
 }
 
-struct ord *min(const struct ord *a, const struct ord *b)
+struct ord *ord_min(const struct eq *ea, const struct ord *oa,
+		const struct eq *eb, const struct ord *ob)
 {
-	return (struct ord *)(a->impl->le(a, b) ? a : b);
+	return (struct ord *)(oa->impl->_le(ea, oa, eb, ob) ? oa : ob);
 }

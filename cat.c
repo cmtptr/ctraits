@@ -6,6 +6,7 @@
 
 #include "cat.h"
 #include "eq.h"
+#include "fmt.h"
 #include "ord.h"
 
 struct priv {
@@ -14,13 +15,16 @@ struct priv {
 	struct cat cat;
 };
 #define cattopriv(c) ((struct priv *)((char *)(c) - offsetof(struct priv, cat)))
+#define eqtopriv(e) cattopriv(((char *)(e) - offsetof(struct cat, eq)))
 #define ordtopriv(o) cattopriv(((char *)(o) - offsetof(struct cat, ord)))
 #define fmttopriv(f) cattopriv(((char *)(f) - offsetof(struct cat, fmt)))
 
-static int cat_cmp(const struct ord *a, const struct ord *b)
+static int cat_cmp(const struct eq *ea, const struct ord *oa,
+		const struct eq *eb, const struct ord *ob)
 {
-	assert(a->impl == b->impl);
-	return strcmp(ordtopriv(a)->name, ordtopriv(b)->name);
+	(void)ea, (void)eb;
+	assert(oa->impl == ob->impl);
+	return strcmp(ordtopriv(oa)->name, ordtopriv(ob)->name);
 }
 
 static int cat_fmt(const struct fmt *f, char *buf, size_t len)
@@ -36,26 +40,20 @@ struct cat *cat_new(const char *name, unsigned int age)
 	};
 	static const struct ord_impl catord = {
 		ORD_IMPL_DEFAULTS,
-		.cmp = cat_cmp,
+		._cmp = cat_cmp,
 	};
 	static const struct fmt_impl catfmt = {
 		FMT_IMPL_DEFAULTS,
-		.fmt = cat_fmt,
+		._fmt = cat_fmt,
 	};
 	struct priv *p = malloc(sizeof *p);
 	*p = (struct priv){
 		.name = name,
 		.age = age,
 		.cat = {
-			.ord = {
-				.eq = {
-					.impl = &cateq,
-				},
-				.impl = &catord,
-			},
-			.fmt = {
-				.impl = &catfmt,
-			},
+			.eq = {.impl = &cateq},
+			.ord = {.impl = &catord},
+			.fmt = {.impl = &catfmt},
 		},
 	};
 	return &p->cat;

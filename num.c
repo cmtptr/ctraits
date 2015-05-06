@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "eq.h"
+#include "fmt.h"
 #include "num.h"
 #include "ord.h"
 
@@ -12,13 +13,16 @@ struct priv {
 	struct num num;
 };
 #define numtopriv(n) ((struct priv *)((char *)(n) - offsetof(struct priv, num)))
+#define eqtopriv(e) numtopriv(((char *)(e) - offsetof(struct num, eq)))
 #define ordtopriv(o) numtopriv(((char *)(o) - offsetof(struct num, ord)))
 #define fmttopriv(f) numtopriv(((char *)(f) - offsetof(struct num, fmt)))
 
-static int num_cmp(const struct ord *a, const struct ord *b)
+static int num_cmp(const struct eq *ea, const struct ord *oa,
+		const struct eq *eb, const struct ord *ob)
 {
-	assert(a->impl == b->impl);
-	return ordtopriv(a)->value - ordtopriv(b)->value;
+	(void)ea, (void)eb;
+	assert(oa->impl == ob->impl);
+	return ordtopriv(oa)->value - ordtopriv(ob)->value;
 }
 
 static int num_fmt(const struct fmt *f, char *buf, size_t len)
@@ -33,25 +37,19 @@ struct num *num_new(int value)
 	};
 	static const struct ord_impl numord = {
 		ORD_IMPL_DEFAULTS,
-		.cmp = num_cmp,
+		._cmp = num_cmp,
 	};
 	static const struct fmt_impl numfmt = {
 		FMT_IMPL_DEFAULTS,
-		.fmt = num_fmt,
+		._fmt = num_fmt,
 	};
 	struct priv *p = malloc(sizeof *p);
 	*p = (struct priv){
 		.value = value,
 		.num = {
-			.ord = {
-				.eq = {
-					.impl = &numeq,
-				},
-				.impl = &numord,
-			},
-			.fmt = {
-				.impl = &numfmt,
-			},
+			.eq = {.impl = &numeq},
+			.ord = {.impl = &numord},
+			.fmt = {.impl = &numfmt},
 		},
 	};
 	return &p->num;
