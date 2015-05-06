@@ -27,49 +27,49 @@ static inline int cmp(const struct eq *ea, const struct ord *oa,
 {
 	return oa->impl->_cmp(ea, oa, eb, ob);
 }
-#define cmp(a, b) cmp(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord)
+#define cmp(a, b) ((void)(&(a) == &(b)), cmp(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord))
 
 static inline int lt(const struct eq *ea, const struct ord *oa,
 		const struct eq *eb, const struct ord *ob)
 {
 	return oa->impl->_lt(ea, oa, eb, ob);
 }
-#define lt(a, b) lt(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord)
+#define lt(a, b) ((void)(&(a) == &(b)), lt(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord))
 
 static inline int le(const struct eq *ea, const struct ord *oa,
 		const struct eq *eb, const struct ord *ob)
 {
 	return oa->impl->_le(ea, oa, eb, ob);
 }
-#define le(a, b) le(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord)
+#define le(a, b) ((void)(&(a) == &(b)), le(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord))
 
 static inline int gt(const struct eq *ea, const struct ord *oa,
 		const struct eq *eb, const struct ord *ob)
 {
 	return oa->impl->_gt(ea, oa, eb, ob);
 }
-#define gt(a, b) gt(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord)
+#define gt(a, b) ((void)(&(a) == &(b)), gt(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord))
 
 static inline int ge(const struct eq *ea, const struct ord *oa,
 		const struct eq *eb, const struct ord *ob)
 {
 	return oa->impl->_ge(ea, oa, eb, ob);
 }
-#define ge(a, b) ge(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord)
+#define ge(a, b) ((void)(&(a) == &(b)), ge(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord))
 
 static inline struct ord *max(const struct eq *ea, const struct ord *oa,
 		const struct eq *eb, const struct ord *ob)
 {
 	return oa->impl->_max(ea, oa, eb, ob);
 }
-#define max(a, b) max(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord)
+#define max(a, b) ((void)(&(a) == &(b)), max(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord))
 
 static inline struct ord *min(const struct eq *ea, const struct ord *oa,
 		const struct eq *eb, const struct ord *ob)
 {
 	return oa->impl->_min(ea, oa, eb, ob);
 }
-#define min(a, b) min(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord)
+#define min(a, b) ((void)(&(a) == &(b)), min(&(a)->eq, &(a)->ord, &(b)->eq, &(b)->ord))
 
 int ord_cmp(const struct eq *, const struct ord *, const struct eq *,
 		const struct ord *);

@@ -1,12 +1,9 @@
-#include <assert.h>
-
 #include "eq.h"
 #include "ord.h"
 
 int ord_cmp(const struct eq *ea, const struct ord *oa, const struct eq *eb,
 		const struct ord *ob)
 {
-	assert(oa->impl == ob->impl);
 	if (ea->impl->_eq(ea, eb))
 		return 0;
 	return oa < ob ? -1 : 1;

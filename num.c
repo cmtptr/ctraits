@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +20,6 @@ static int num_cmp(const struct eq *ea, const struct ord *oa,
 		const struct eq *eb, const struct ord *ob)
 {
 	(void)ea, (void)eb;
-	assert(oa->impl == ob->impl);
 	return ordtopriv(oa)->value - ordtopriv(ob)->value;
 }
 

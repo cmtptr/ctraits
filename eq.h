@@ -14,13 +14,13 @@ static inline int eq(const struct eq *a, const struct eq *b)
 {
 	return a->impl->_eq(a, b);
 }
-#define eq(a, b) eq(&(a)->eq, &(b)->eq)
+#define eq(a, b) ((void)(&(a) == &(b)), eq(&(a)->eq, &(b)->eq))
 
 static inline int neq(const struct eq *a, const struct eq *b)
 {
 	return a->impl->_neq(a, b);
 }
-#define neq(a, b) neq(&(a)->eq, &(b)->eq)
+#define neq(a, b) ((void)(&(a) == &(b)), neq(&(a)->eq, &(b)->eq))
 
 int eq_eq(const struct eq *, const struct eq *);
 int eq_neq(const struct eq *, const struct eq *);

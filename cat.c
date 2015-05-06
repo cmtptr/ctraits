@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,7 +22,6 @@ static int cat_cmp(const struct eq *ea, const struct ord *oa,
 		const struct eq *eb, const struct ord *ob)
 {
 	(void)ea, (void)eb;
-	assert(oa->impl == ob->impl);
 	return strcmp(ordtopriv(oa)->name, ordtopriv(ob)->name);
 }
 
